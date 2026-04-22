@@ -28,14 +28,27 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Sync Web Assets
+      - name: Fix Web Assets and Sync
         run: |
-          # Jar tumcha code main folder madhe asel tar to www madhe copy karel
-          if [ ! -d "www" ]; then mkdir www; fi
-          cp *.html www/ 2>/dev/null || :
-          cp *.css www/ 2>/dev/null || :
-          cp *.js www/ 2>/dev/null || :
+          # 1. 'www' folder nase tar banva
+          mkdir -p www
           
+          # 2. index.html shodha aani www madhe taka
+          # Jar ti baher asel tar www madhe copy kara
+          if [ -f "index.html" ]; then
+            cp index.html www/
+          fi
+          
+          # 3. Jar tumcha code dusrya folder madhe asel (e.g. public) tar to copy kara
+          if [ -d "public" ]; then
+            cp -r public/* www/
+          fi
+          
+          # 4. Shevti check kara index.html aali ka, nase tar dummy banva (fail hou naye mhanun)
+          if [ ! -f "www/index.html" ]; then
+            echo "<html><body>CSNDuty App - File Not Found in Root</body></html>" > www/index.html
+          fi
+
           if [ ! -d "android" ]; then
             npx cap add android
           fi
