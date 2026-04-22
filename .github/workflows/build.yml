@@ -3,8 +3,6 @@ name: Build APK
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
   build:
@@ -30,12 +28,14 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Fix Web Assets and Sync
+      - name: Sync Web Assets
         run: |
-          mkdir -p www
-          if [ ! -f "www/index.html" ]; then
-            echo "<html><body>CSNDuty App</body></html>" > www/index.html
-          fi
+          # Jar tumcha code main folder madhe asel tar to www madhe copy karel
+          if [ ! -d "www" ]; then mkdir www; fi
+          cp *.html www/ 2>/dev/null || :
+          cp *.css www/ 2>/dev/null || :
+          cp *.js www/ 2>/dev/null || :
+          
           if [ ! -d "android" ]; then
             npx cap add android
           fi
