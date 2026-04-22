@@ -1,0 +1,8 @@
+{
+  "appId": "com.csn.duty",
+  "appName": "CSN Duty",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}
