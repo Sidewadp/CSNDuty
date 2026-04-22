@@ -1,19 +1,41 @@
-- name: Setup Java
+name: Build APK
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: |
+          npm install
+          npm install @capacitor/core @capacitor/cli @capacitor/android
+
+      - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      # --- YETHE BADAL KELA AAHE ---
-      - name: Add Android Platform (if missing)
+      - name: Initialize Android Platform
         run: |
           if [ ! -d "android" ]; then
-            npm install @capacitor/android
             npx cap add android
           fi
-
-      - name: Capacitor Sync
-        run: npx cap sync android
+          npx cap sync android
 
       - name: Build Android APK
         run: |
