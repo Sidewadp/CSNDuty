@@ -30,8 +30,12 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Initialize Android Platform
+      - name: Fix Web Assets and Sync
         run: |
+          mkdir -p www
+          if [ ! -f "www/index.html" ]; then
+            echo "<html><body>CSNDuty App</body></html>" > www/index.html
+          fi
           if [ ! -d "android" ]; then
             npx cap add android
           fi
